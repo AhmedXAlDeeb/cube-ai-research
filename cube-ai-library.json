@@ -1,5 +1,18 @@
 [
   {
+    "id": "35359539-4f25-4486-a4c7-7403ec465736",
+    "title": "Noise Doesn't Lie",
+    "tags": [
+      "test"
+    ],
+    "addedAt": "2026-01-01T23:33:37.745Z",
+    "comments": [],
+    "type": "repo",
+    "arxivId": "LOCAL PDF",
+    "sourcePath": "Noise Doesn't Lie",
+    "addedBy": "AhmedXAlDeeb"
+  },
+  {
     "id": "1b59ad63-0ca1-40ff-873b-c9aa0d9f9c0d",
     "title": "Adaptive Label Correction for Robust Medical Image Segmentation with Noisy Labels",
     "tags": [
