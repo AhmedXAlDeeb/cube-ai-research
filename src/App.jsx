@@ -647,7 +647,7 @@ export default function GitHubPaperManager() {
                   <span className="text-xs font-mono text-[#57606a]">{activePaper.sourcePath}</span>
                 )}
                 {activePaper.type === 'arxiv' && (
-                    <a href={`https://arxiv.org/abs/${activePaper.arxivId}`} target="_blank" rel="noreferrer" className="text-xs flex items-center text-[#57606a] hover:text-[#0969da]"><ExternalLink className="w-3 h-3 mr-1"/> ArXiv</a>
+                    <a href={`https://arxiv.org/pdf/${activePaper.arxivId}`} target="_blank" rel="noreferrer" className="text-xs flex items-center text-[#57606a] hover:text-[#0969da]"><ExternalLink className="w-3 h-3 mr-1"/> ArXiv</a>
                 )}
               </div>
               
