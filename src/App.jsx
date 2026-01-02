@@ -27,6 +27,8 @@ import {
 const DEFAULT_FILENAME = 'cube-ai-library.json';
 const STORAGE_KEY = 'cube_ai_config';
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+
 // --- Demo Data ---
 const DEMO_PAPERS = [
   {
@@ -222,69 +224,69 @@ const ArxivViewer = ({ arxivId }) => {
 
 // --- UPDATED SECURE PDF VIEWER ---
 const SecurePdfViewer = ({ config, paper }) => {
-  const [url, setUrl] = useState(null);
+  const [blobUrl, setBlobUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const loadPdf = async () => {
-      setError(null);
-      setLoading(true);
+    let active = true;
 
-      // STRATEGY 1: Direct Link (Fastest - for Public folder)
-      // If the path starts with "papers/", we assume it's in the public folder
-      if (paper.sourcePath && paper.sourcePath.startsWith('papers/')) {
-        // Handle spaces in filename by encoding them
-        const encodedPath = paper.sourcePath.split('/').map(part => encodeURIComponent(part)).join('/');
-        const directUrl = `./${encodedPath}`; 
-        
-        // Check if file exists to avoid 404s showing blank frames
-        try {
-          const check = await fetch(directUrl, { method: 'HEAD' });
-          if (check.ok) {
-            setUrl(directUrl);
-            setLoading(false);
-            return; 
-          } else {
-             console.log("Direct load failed (404), trying API...");
-          }
-        } catch (e) {
-          console.log("Direct load failed, trying API...", e);
-        }
-      }
-
-      // STRATEGY 2: GitHub API (Fallback for Private/Root files)
-      if (config.token === 'demo-mode') {
-         setError("Demo Mode: Cannot load Repo PDF.");
+    const fetchPdf = async () => {
+      // 1. Direct Public Link (If user moved files to public folder)
+      // If the path starts with http, use it directly
+      if (paper.sourcePath && paper.sourcePath.startsWith('http')) {
+         setBlobUrl(paper.sourcePath);
          setLoading(false);
          return;
       }
 
+      // 2. Demo Mode
+      if (config.token === 'demo-mode') {
+        setTimeout(() => {
+             if(active) { setError("Demo Mode: Cannot load Repo PDF."); setLoading(false); }
+        }, 500);
+        return;
+      }
+
+      // 3. GitHub API Fetch (For files in 'main' branch, private or public)
       try {
-        const apiUrl = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${paper.sourcePath}`;
-        const res = await fetch(apiUrl, {
+        const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${paper.sourcePath}`;
+        const res = await fetch(url, {
            headers: {
              'Authorization': `token ${config.token}`,
              'Accept': 'application/vnd.github.v3.raw' 
            }
         });
 
-        if (!res.ok) throw new Error(`GitHub API Error: ${res.status}`);
+        if (!res.ok) throw new Error(`GitHub Error ${res.status}: File not found or token invalid.`);
         
         const blob = await res.blob();
-        const objectUrl = URL.createObjectURL(blob);
-        setUrl(objectUrl);
-        setLoading(false);
+        if (active) {
+          const objectUrl = URL.createObjectURL(blob);
+          setBlobUrl(objectUrl);
+          setLoading(false);
+        }
       } catch (err) {
-        setError(err.message);
-        setLoading(false);
+        if (active) {
+          // Fallback: Try raw.githubusercontent.com (Works for Public Repos if API fails)
+          const publicUrl = `https://raw.githubusercontent.com/${config.owner}/${config.repo}/main/${paper.sourcePath}`;
+          
+          // Verify if fallback works
+          const check = await fetch(publicUrl, { method: 'HEAD' });
+          if (check.ok) {
+             setBlobUrl(publicUrl);
+             setLoading(false);
+             setError(null);
+          } else {
+             setError(err.message);
+             setLoading(false);
+          }
+        }
       }
     };
 
-    loadPdf();
-    
-    // Cleanup blob URLs
-    return () => { if (url && url.startsWith('blob:')) URL.revokeObjectURL(url); };
+    fetchPdf();
+    return () => { active = false; if (blobUrl && !blobUrl.startsWith('http')) URL.revokeObjectURL(blobUrl); };
   }, [paper.id, config]);
 
   if (loading) return (
@@ -299,15 +301,20 @@ const SecurePdfViewer = ({ config, paper }) => {
       <AlertCircle className="w-10 h-10 mb-4 opacity-50" />
       <p className="font-semibold">Could not load PDF</p>
       <p className="text-sm mt-2 opacity-80">{error}</p>
-      <div className="text-xs mt-4 text-[#8b949e] border border-[#30363d] p-2 rounded bg-[#0d1117]">
-         path: {paper.sourcePath}
+      <div className="text-xs mt-4 text-[#8b949e] bg-[#0d1117] p-3 rounded border border-[#30363d]">
+        <p className="mb-1 font-bold">Checklist:</p>
+        <ul className="text-left list-disc list-inside space-y-1">
+           <li>Did you <b>push</b> the file to GitHub?</li>
+           <li>Is the path <code>{paper.sourcePath}</code> exact? (Case-sensitive!)</li>
+           <li>Does your Token have <code>repo</code> scope?</li>
+        </ul>
       </div>
     </div>
   );
 
   return (
     <iframe 
-      src={url} 
+      src={blobUrl} 
       className="flex-1 w-full h-full border-none bg-[#525659]"
       title="PDF Viewer" 
     />
