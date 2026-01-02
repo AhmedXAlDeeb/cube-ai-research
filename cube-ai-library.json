@@ -4,7 +4,17 @@
     "title": "test",
     "tags": [],
     "addedAt": "2026-01-02T00:20:26.426Z",
-    "comments": [],
+    "comments": [
+      {
+        "id": "8e66c745-4d5a-458e-b8ec-7fc6e546dae3",
+        "text": "title test",
+        "page": null,
+        "quote": "Agentic Systems in Radiology: Design, Applications, Evaluation, and Challenges",
+        "user": "AhmedXAlDeeb",
+        "avatar": "https://avatars.githubusercontent.com/u/124098788?v=4",
+        "timestamp": "2026-01-02T00:21:22.775Z"
+      }
+    ],
     "type": "repo",
     "arxivId": "LOCAL PDF",
     "sourcePath": "papers/AgenticSystemsinRadiology.pdf",
