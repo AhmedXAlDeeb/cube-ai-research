@@ -187,6 +187,39 @@ const AddPaperModal = ({ onClose, onAdd, isSyncing }) => {
   );
 };
 
+// --- ARXIV VIEWER (With Fallback) ---
+const ArxivViewer = ({ arxivId }) => {
+  const [mode, setMode] = useState('html'); // 'html' | 'pdf'
+
+  return (
+    <div className="flex-1 flex flex-col h-full bg-white relative">
+      <div className="absolute top-3 right-6 z-10 flex bg-white/90 backdrop-blur border border-[#30363d]/20 rounded-lg p-1 shadow-sm">
+        <button 
+          onClick={() => setMode('html')}
+          className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${mode === 'html' ? 'bg-cyan-100 text-cyan-800' : 'text-gray-500 hover:text-gray-900'}`}
+        >
+          Web
+        </button>
+        <button 
+          onClick={() => setMode('pdf')}
+          className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${mode === 'pdf' ? 'bg-cyan-100 text-cyan-800' : 'text-gray-500 hover:text-gray-900'}`}
+        >
+          PDF
+        </button>
+      </div>
+      
+      <iframe 
+        src={mode === 'html' 
+          ? `https://ar5iv.labs.arxiv.org/html/${arxivId}` 
+          : `https://docs.google.com/gview?url=https://arxiv.org/pdf/${arxivId}.pdf&embedded=true`
+        }
+        className="w-full h-full border-none bg-white"
+        title="ArXiv Reader" 
+      />
+    </div>
+  );
+};
+
 // --- UPDATED SECURE PDF VIEWER ---
 const SecurePdfViewer = ({ config, paper }) => {
   const [url, setUrl] = useState(null);
@@ -203,7 +236,7 @@ const SecurePdfViewer = ({ config, paper }) => {
       if (paper.sourcePath && paper.sourcePath.startsWith('papers/')) {
         // Handle spaces in filename by encoding them
         const encodedPath = paper.sourcePath.split('/').map(part => encodeURIComponent(part)).join('/');
-        const directUrl = `./${paper.sourcePath}`; 
+        const directUrl = `./${encodedPath}`; 
         
         // Check if file exists to avoid 404s showing blank frames
         try {
@@ -609,7 +642,7 @@ export default function GitHubPaperManager() {
               {activePaper.type === 'repo' ? (
                 <SecurePdfViewer config={config} paper={activePaper} />
               ) : (
-                <iframe src={`https://www.arxiv-vanity.com/papers/${activePaper.arxivId}/`} className="flex-1 w-full h-full border-none bg-white" title="Paper Reader" />
+                <ArxivViewer arxivId={activePaper.arxivId} />
               )}
             </div>
 
