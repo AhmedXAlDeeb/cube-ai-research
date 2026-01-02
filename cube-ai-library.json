@@ -1,5 +1,18 @@
 [
   {
+    "id": "1d158a74-2af4-4f8e-95f6-364507bea62f",
+    "title": "Agentic Systems in Radiology.pdf",
+    "tags": [
+      "test"
+    ],
+    "addedAt": "2026-01-02T00:09:19.786Z",
+    "comments": [],
+    "type": "repo",
+    "arxivId": "LOCAL PDF",
+    "sourcePath": "papers/Agentic Systems in Radiology.pdf",
+    "addedBy": "AhmedXAlDeeb"
+  },
+  {
     "id": "35359539-4f25-4486-a4c7-7403ec465736",
     "title": "Noise Doesn't Lie",
     "tags": [
