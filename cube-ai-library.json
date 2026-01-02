@@ -1,5 +1,16 @@
 [
   {
+    "id": "34b406b5-fdc8-4b35-bfeb-877e97bbfb28",
+    "title": "test arxiv",
+    "tags": [],
+    "addedAt": "2026-01-02T00:26:40.174Z",
+    "comments": [],
+    "type": "arxiv",
+    "arxivId": "2503.12218",
+    "sourcePath": null,
+    "addedBy": "AhmedXAlDeeb"
+  },
+  {
     "id": "ca2e4a70-515f-4a1f-b05a-d445cbe2d25e",
     "title": "test",
     "tags": [],
