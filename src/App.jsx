@@ -20,53 +20,24 @@ import {
   User,
   File,
   Loader,
-  Box // Added for Cube Icon feel
+  Box
 } from 'lucide-react';
 
 // --- Constants ---
 const DEFAULT_FILENAME = 'cube-ai-library.json';
 const STORAGE_KEY = 'cube_ai_config';
 
-// --- Demo Data (Tailored to CUBE.AI Team) ---
+// --- Demo Data ---
 const DEMO_PAPERS = [
   {
     id: 'demo-1',
-    title: 'Agentic Systems in Radiology: Design & Applications',
+    title: 'Agentic Systems in Radiology',
     arxivId: '2510.09404',
     type: 'arxiv',
     addedBy: 'Mostafa Ali',
-    addedAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    tags: ['Phase 2', 'Agents', 'Extension'],
-    comments: [
-      { id: 'c1', user: 'Mostafa Ali', text: 'This represents the core architecture for our Extension Phase.', quote: '...agents that perceive and act upon their environment...', timestamp: new Date(Date.now() - 86400000).toISOString() },
-      { id: 'c2', user: 'Dr. Mina Makary', text: 'Excellent reference. Let\'s focus on how the "Memory" module here aligns with our GitHub integration.', timestamp: new Date().toISOString() }
-    ]
-  },
-  {
-    id: 'demo-2',
-    title: 'CUBE.AI Phase 1: Assisted Segmentation Report',
-    arxivId: 'LOCAL PDF',
-    sourcePath: 'docs/phase1-report-final.pdf', 
-    type: 'repo',
-    addedBy: 'Meram Mahmoud',
-    addedAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-    tags: ['Phase 1', 'Segmentation', 'Internal'],
-    comments: [
-      { id: 'c3', user: 'Shahd Ahmed', text: 'I updated the bounding-box accuracy metrics on page 3.', timestamp: new Date(Date.now() - 40000000).toISOString() },
-      { id: 'c4', user: 'Ibrahim Fateen', text: 'Confirmed. The "Teacher-Student" loop latency is down to 200ms.', timestamp: new Date().toISOString() }
-    ]
-  },
-  {
-    id: 'demo-3',
-    title: 'Interactive Segmentation with Foundation Models',
-    arxivId: '2304.02643', // Example Segment Anything Paper
-    type: 'arxiv',
-    addedBy: 'Ahmed El-deep',
-    addedAt: new Date(Date.now() - 86400000 * 10).toISOString(),
-    tags: ['Literature', 'SAM', 'Reference'],
-    comments: [
-        { id: 'c5', user: 'Ahmed El-deep', text: 'We should benchmark our lightweight model against the small ViT encoder here.', timestamp: new Date().toISOString() }
-    ]
+    addedAt: new Date().toISOString(),
+    tags: ['Phase 2', 'Agents'],
+    comments: []
   }
 ];
 
@@ -92,7 +63,6 @@ const ConfigModal = ({ config, onSave, isVerifying, error }) => {
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-teal-500 rounded-full animate-pulse" />
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">CUBE<span className="text-cyan-400">.AI</span> Research</h2>
-          <p className="text-[#8b949e] mt-2 text-sm">Smarter AI, In The Hands of Every Radiologist</p>
         </div>
 
         <div className="bg-[#161b22] border border-[#30363d] rounded-xl shadow-2xl overflow-hidden p-6 space-y-5">
@@ -106,20 +76,19 @@ const ConfigModal = ({ config, onSave, isVerifying, error }) => {
           <div className="space-y-4">
             <div>
               <label className="block text-xs font-semibold text-[#8b949e] mb-1 uppercase tracking-wider">Repository Owner</label>
-              <input name="owner" value={formData.owner} onChange={handleChange} placeholder="e.g. cube-ai-team" className="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-2 text-sm text-white focus:border-cyan-500 outline-none transition-all" />
+              <input name="owner" value={formData.owner} onChange={handleChange} placeholder="e.g. cube-ai-team" className="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-2 text-sm text-white focus:border-cyan-500 outline-none" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#8b949e] mb-1 uppercase tracking-wider">Repository Name</label>
-              <input name="repo" value={formData.repo} onChange={handleChange} placeholder="e.g. knowledge-base" className="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-2 text-sm text-white focus:border-cyan-500 outline-none transition-all" />
+              <input name="repo" value={formData.repo} onChange={handleChange} placeholder="e.g. knowledge-base" className="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-2 text-sm text-white focus:border-cyan-500 outline-none" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#8b949e] mb-1 uppercase tracking-wider">Personal Access Token</label>
-              <input name="token" type="password" value={formData.token} onChange={handleChange} placeholder="ghp_..." className="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-2 text-sm text-white focus:border-cyan-500 outline-none transition-all" />
-              <p className="text-[10px] text-[#8b949e] mt-1">Requires 'repo' scope.</p>
+              <input name="token" type="password" value={formData.token} onChange={handleChange} placeholder="ghp_..." className="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-2 text-sm text-white focus:border-cyan-500 outline-none" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-[#8b949e] mb-1 uppercase tracking-wider">DB File Path</label>
-              <input name="path" value={formData.path} onChange={handleChange} placeholder={DEFAULT_FILENAME} className="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-2 text-sm text-white focus:border-cyan-500 outline-none transition-all" />
+              <input name="path" value={formData.path} onChange={handleChange} placeholder={DEFAULT_FILENAME} className="w-full bg-[#0d1117] border border-[#30363d] rounded-md px-3 py-2 text-sm text-white focus:border-cyan-500 outline-none" />
             </div>
           </div>
 
@@ -127,17 +96,10 @@ const ConfigModal = ({ config, onSave, isVerifying, error }) => {
             <button 
               onClick={() => onSave(formData)} 
               disabled={isVerifying || !formData.token || !formData.repo}
-              className="w-full py-2.5 bg-[#0969da] text-white rounded-md hover:bg-[#0a75f0] font-semibold text-sm transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-900/20"
+              className="w-full py-2.5 bg-[#0969da] text-white rounded-md hover:bg-[#0a75f0] font-semibold text-sm transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isVerifying ? (
-                <>
-                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> Verifying...
-                </>
-              ) : (
-                <>
-                  <Github className="w-4 h-4 mr-2" /> Connect & Verify
-                </>
-              )}
+              {isVerifying ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Github className="w-4 h-4 mr-2" />}
+              {isVerifying ? 'Verifying...' : 'Connect & Verify'}
             </button>
             <button onClick={handleDemo} className="w-full text-xs text-[#8b949e] hover:text-white underline">
               Try Team Demo Mode
@@ -150,9 +112,9 @@ const ConfigModal = ({ config, onSave, isVerifying, error }) => {
 };
 
 const AddPaperModal = ({ onClose, onAdd, isSyncing }) => {
-  const [mode, setMode] = useState('arxiv'); // 'arxiv' or 'repo'
+  const [mode, setMode] = useState('arxiv'); 
   const [title, setTitle] = useState('');
-  const [id, setId] = useState(''); // Stores ID or Path
+  const [id, setId] = useState(''); 
   const [tags, setTags] = useState('');
 
   const handleSubmit = (e) => {
@@ -165,7 +127,7 @@ const AddPaperModal = ({ onClose, onAdd, isSyncing }) => {
       tags: tags.split(',').map(t => t.trim()).filter(Boolean),
       addedAt: new Date().toISOString(),
       comments: [],
-      type: mode // 'arxiv' or 'repo'
+      type: mode 
     };
 
     if (mode === 'arxiv') {
@@ -176,7 +138,7 @@ const AddPaperModal = ({ onClose, onAdd, isSyncing }) => {
       paperData.sourcePath = null;
     } else {
       paperData.arxivId = 'LOCAL PDF';
-      paperData.sourcePath = id.trim(); // e.g. "papers/paper.pdf"
+      paperData.sourcePath = id.trim(); 
     }
     
     onAdd(paperData);
@@ -191,18 +153,8 @@ const AddPaperModal = ({ onClose, onAdd, isSyncing }) => {
         </div>
         
         <div className="p-4 border-b border-[#30363d] flex gap-2">
-           <button 
-             onClick={() => setMode('arxiv')}
-             className={`flex-1 py-2 text-xs font-medium rounded-md transition-colors ${mode === 'arxiv' ? 'bg-cyan-900/40 text-cyan-400 border border-cyan-500/50' : 'bg-[#0d1117] text-[#8b949e] border border-[#30363d]'}`}
-           >
-             ArXiv URL
-           </button>
-           <button 
-             onClick={() => setMode('repo')}
-             className={`flex-1 py-2 text-xs font-medium rounded-md transition-colors ${mode === 'repo' ? 'bg-cyan-900/40 text-cyan-400 border border-cyan-500/50' : 'bg-[#0d1117] text-[#8b949e] border border-[#30363d]'}`}
-           >
-             PDF in Repo
-           </button>
+           <button onClick={() => setMode('arxiv')} className={`flex-1 py-2 text-xs font-medium rounded-md transition-colors ${mode === 'arxiv' ? 'bg-cyan-900/40 text-cyan-400 border border-cyan-500/50' : 'bg-[#0d1117] text-[#8b949e] border border-[#30363d]'}`}>ArXiv URL</button>
+           <button onClick={() => setMode('repo')} className={`flex-1 py-2 text-xs font-medium rounded-md transition-colors ${mode === 'repo' ? 'bg-cyan-900/40 text-cyan-400 border border-cyan-500/50' : 'bg-[#0d1117] text-[#8b949e] border border-[#30363d]'}`}>PDF in Repo</button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
@@ -210,7 +162,6 @@ const AddPaperModal = ({ onClose, onAdd, isSyncing }) => {
             <label className="text-xs text-[#8b949e] font-semibold uppercase">Title</label>
             <input value={title} onChange={e => setTitle(e.target.value)} className="w-full bg-[#0d1117] border border-[#30363d] rounded p-2 text-sm text-white mt-1 focus:border-cyan-500 outline-none" placeholder="e.g. My Research Paper" required />
           </div>
-          
           {mode === 'arxiv' ? (
             <div>
               <label className="text-xs text-[#8b949e] font-semibold uppercase">ArXiv ID</label>
@@ -220,10 +171,9 @@ const AddPaperModal = ({ onClose, onAdd, isSyncing }) => {
              <div>
               <label className="text-xs text-[#8b949e] font-semibold uppercase">File Path in Repo</label>
               <input value={id} onChange={e => setId(e.target.value)} className="w-full bg-[#0d1117] border border-[#30363d] rounded p-2 text-sm text-white mt-1 focus:border-cyan-500 outline-none font-mono" placeholder="e.g. papers/my-new-paper.pdf" required />
-              <p className="text-[10px] text-[#8b949e] mt-1">Must match exact path in your repository's <code>papers/</code> folder.</p>
+              <p className="text-[10px] text-[#8b949e] mt-1">Must match exact path. Use <code>papers/file.pdf</code> for public files.</p>
             </div>
           )}
-
           <div>
             <label className="text-xs text-[#8b949e] font-semibold uppercase">Tags</label>
             <input value={tags} onChange={e => setTags(e.target.value)} className="w-full bg-[#0d1117] border border-[#30363d] rounded p-2 text-sm text-white mt-1 focus:border-cyan-500 outline-none" placeholder="Draft, Review" />
@@ -237,83 +187,94 @@ const AddPaperModal = ({ onClose, onAdd, isSyncing }) => {
   );
 };
 
-// --- PDF Fetcher for Repo Files ---
+// --- UPDATED SECURE PDF VIEWER ---
 const SecurePdfViewer = ({ config, paper }) => {
-  const [blobUrl, setBlobUrl] = useState(null);
+  const [url, setUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    let active = true;
+    const loadPdf = async () => {
+      setError(null);
+      setLoading(true);
 
-    const fetchPdf = async () => {
-      // Demo Mode
-      if (config.token === 'demo-mode') {
-        if(paper.id.startsWith('demo')) {
-           // Simulate loading delay for demo
-           setTimeout(() => {
-             if (active) {
-                // In a real demo, we might load a placeholder, but for now we show a message
-                setError("Demo Mode: Cannot load actual Repo PDF content without a real token.");
-                setLoading(false);
-             }
-           }, 1000);
-           return;
+      // STRATEGY 1: Direct Link (Fastest - for Public folder)
+      // If the path starts with "papers/", we assume it's in the public folder
+      if (paper.sourcePath && paper.sourcePath.startsWith('papers/')) {
+        // Handle spaces in filename by encoding them
+        const encodedPath = paper.sourcePath.split('/').map(part => encodeURIComponent(part)).join('/');
+        const directUrl = `./${paper.sourcePath}`; 
+        
+        // Check if file exists to avoid 404s showing blank frames
+        try {
+          const check = await fetch(directUrl, { method: 'HEAD' });
+          if (check.ok) {
+            setUrl(directUrl);
+            setLoading(false);
+            return; 
+          } else {
+             console.log("Direct load failed (404), trying API...");
+          }
+        } catch (e) {
+          console.log("Direct load failed, trying API...", e);
         }
+      }
+
+      // STRATEGY 2: GitHub API (Fallback for Private/Root files)
+      if (config.token === 'demo-mode') {
+         setError("Demo Mode: Cannot load Repo PDF.");
+         setLoading(false);
+         return;
       }
 
       try {
-        const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${paper.sourcePath}`;
-        const res = await fetch(url, {
+        const apiUrl = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${paper.sourcePath}`;
+        const res = await fetch(apiUrl, {
            headers: {
              'Authorization': `token ${config.token}`,
-             'Accept': 'application/vnd.github.v3.raw' // Critical: Asks for raw binary
+             'Accept': 'application/vnd.github.v3.raw' 
            }
         });
 
-        if (!res.ok) throw new Error(`Could not load PDF: ${res.statusText}`);
+        if (!res.ok) throw new Error(`GitHub API Error: ${res.status}`);
         
         const blob = await res.blob();
-        if (active) {
-          const objectUrl = URL.createObjectURL(blob);
-          setBlobUrl(objectUrl);
-          setLoading(false);
-        }
+        const objectUrl = URL.createObjectURL(blob);
+        setUrl(objectUrl);
+        setLoading(false);
       } catch (err) {
-        if (active) {
-          setError(err.message);
-          setLoading(false);
-        }
+        setError(err.message);
+        setLoading(false);
       }
     };
 
-    fetchPdf();
-
-    return () => {
-      active = false;
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
-    };
+    loadPdf();
+    
+    // Cleanup blob URLs
+    return () => { if (url && url.startsWith('blob:')) URL.revokeObjectURL(url); };
   }, [paper.id, config]);
 
   if (loading) return (
     <div className="flex items-center justify-center h-full flex-col text-[#8b949e]">
       <Loader className="w-8 h-8 animate-spin mb-4 text-cyan-400" />
-      <p>Securely fetching PDF from repository...</p>
+      <p>Loading PDF...</p>
     </div>
   );
 
   if (error) return (
     <div className="flex items-center justify-center h-full flex-col text-red-400 p-8 text-center">
       <AlertCircle className="w-10 h-10 mb-4 opacity-50" />
-      <p className="font-semibold">Failed to load PDF</p>
+      <p className="font-semibold">Could not load PDF</p>
       <p className="text-sm mt-2 opacity-80">{error}</p>
-      <p className="text-xs mt-4 text-[#8b949e]">Ensure <code>{paper.sourcePath}</code> exists in the repo.</p>
+      <div className="text-xs mt-4 text-[#8b949e] border border-[#30363d] p-2 rounded bg-[#0d1117]">
+         path: {paper.sourcePath}
+      </div>
     </div>
   );
 
   return (
     <iframe 
-      src={blobUrl} 
+      src={url} 
       className="flex-1 w-full h-full border-none bg-[#525659]"
       title="PDF Viewer" 
     />
@@ -358,7 +319,6 @@ export default function GitHubPaperManager() {
     
     if (cfg.token === 'demo-mode') {
       setTimeout(() => {
-        // Use current user from Team if possible or generic
         setCurrentUser({ login: 'Mostafa Ali', avatar_url: null });
         setPapers(DEMO_PAPERS);
         setConfig(cfg);
@@ -409,7 +369,6 @@ export default function GitHubPaperManager() {
         throw new Error(`GitHub API Error: ${response.statusText}`);
       } else {
         const data = await response.json();
-        // Decode base64 content
         try {
             const content = JSON.parse(decodeURIComponent(escape(atob(data.content))));
             setPapers(content);
@@ -435,7 +394,6 @@ export default function GitHubPaperManager() {
     
     if (config.token === 'demo-mode') {
       await new Promise(r => setTimeout(r, 600));
-      // Basic merge logic for demo
       let newPapers = [...papers];
       if (changeType === 'ADD_PAPER') newPapers = [payload, ...newPapers];
       if (changeType === 'DELETE_PAPER') newPapers = newPapers.filter(p => p.id !== payload.id);
@@ -472,7 +430,6 @@ export default function GitHubPaperManager() {
         throw new Error("Failed to fetch latest data");
       }
 
-      // Merge Logic (Simplified)
       let mergedPapers = [...remotePapers];
       if (changeType === 'ADD_PAPER') mergedPapers = [payload, ...mergedPapers];
       if (changeType === 'DELETE_PAPER') mergedPapers = mergedPapers.filter(p => p.id !== payload.id);
@@ -557,8 +514,6 @@ export default function GitHubPaperManager() {
       setQuoteText('');
     }
   };
-
-  // --- Render ---
 
   if (!config && !showConfig) return (
      <div className="flex h-screen w-full items-center justify-center bg-[#0d1117] text-[#c9d1d9]">
@@ -647,11 +602,10 @@ export default function GitHubPaperManager() {
                   <span className="text-xs font-mono text-[#57606a]">{activePaper.sourcePath}</span>
                 )}
                 {activePaper.type === 'arxiv' && (
-                    <a href={`https://arxiv.org/pdf/${activePaper.arxivId}`} target="_blank" rel="noreferrer" className="text-xs flex items-center text-[#57606a] hover:text-[#0969da]"><ExternalLink className="w-3 h-3 mr-1"/> ArXiv</a>
+                    <a href={`https://arxiv.org/abs/${activePaper.arxivId}`} target="_blank" rel="noreferrer" className="text-xs flex items-center text-[#57606a] hover:text-[#0969da]"><ExternalLink className="w-3 h-3 mr-1"/> ArXiv</a>
                 )}
               </div>
               
-              {/* Conditional Renderer */}
               {activePaper.type === 'repo' ? (
                 <SecurePdfViewer config={config} paper={activePaper} />
               ) : (
@@ -694,4 +648,4 @@ export default function GitHubPaperManager() {
       {showAdd && <AddPaperModal onClose={() => setShowAdd(false)} onAdd={handleAddPaper} isSyncing={syncing} />}
     </div>
   );
-} 
+}
