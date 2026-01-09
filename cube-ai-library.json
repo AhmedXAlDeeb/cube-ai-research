@@ -1,5 +1,19 @@
 [
   {
+    "id": "71d30862-880a-4da5-8d48-f870198f92f3",
+    "title": "Sentence BERT",
+    "tags": [
+      "RAG",
+      "Bi-Encoders"
+    ],
+    "addedAt": "2026-01-09T09:33:18.641Z",
+    "comments": [],
+    "type": "arxiv",
+    "arxivId": "1908.10084",
+    "sourcePath": null,
+    "addedBy": "Ibrahim-Fateen"
+  },
+  {
     "id": "34b406b5-fdc8-4b35-bfeb-877e97bbfb28",
     "title": "test arxiv",
     "tags": [],
